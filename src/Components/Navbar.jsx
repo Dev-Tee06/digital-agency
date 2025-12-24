@@ -1,60 +1,84 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export const Navbar = ({ menuOpen, setMenuOpen }) => {
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    document.body.style.overflow = menuOpen ? "hidden" : "auto";
   }, [menuOpen]);
 
+  const navLinks = [
+    { name: "Home", path: "/" },
+    // { name: "About", path: "/about" },
+    { name: "Services", path: "/services" },
+    { name: "Portfolio", path: "/portfolio" },
+    { name: "Pricing", path: "/pricing" },
+    { name: "Blog", path: "/blog" },
+    { name: "Careers", path: "/career" },
+  ];
+
   return (
-    <nav className="fixed top-0 w-full z-40 bg-#e0e0e0 backdrop-blur-lg border-b border-white/10 shadow-lg">
-      <div className="max-w-10xl mx-auto px-7">
-        <div className="flex justify-between items-center h-16 ">
-          <a
-            href="#home"
-            className=" font-mono text-3xl  font-bold text-purple-800"
-          >
-            <span className="text-black-500 italic">TESS</span>
-          </a>
+    <nav className="fixed top-0 w-full z-50 bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-5">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-bold">
+            <span className="text-purple-600">TEX</span>
+            <span className="text-gray-900">IFY</span>
+          </Link>
 
-          <div
-            className="w-7 h-7 flex items-center justify-center relative cursor-pointer z-50 md:hidden"
-            onClick={() => setMenuOpen((prev) => !prev)}
-          >
-            {menuOpen ? (
-              <span className="text-3xl text-white">&times;</span>
-            ) : (
-              <span className="text-3xl text-black-500">&#9776;</span>
-            )}
-          </div>
-
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8">
-            <a
-              href="#home"
-              className="text-black-500 hover:text-gray font-semibold text-lg cursor-pointer hover:text-purple-500 py-2 hover:border-b-5 hover:border-purple-500 transition-all duration-300"
-            >
-              Home
-            </a>
-            <a
-              href="#services"
-              className="text-black-500 hover:text-gray font-semibold text-lg cursor-pointer py-2 hover:text-purple-500 hover:border-b-5 hover:border-purple-500 transition-all duration-300"
-            >
-              Services
-            </a>
-            <a
-              href="#blog"
-              className="text-black-500 hover:text-gray font-semibold text-lg hover:text-purple-500 cursor-pointer py-2 hover:border-b-5 hover:border-purple-500 transition-all duration-300"
-            >
-              Blog
-            </a>
-            <a
-              href="#contact"
-              className="text-white-500 bg-purple-500 rounded-[50px] w-full  cursor-pointer py-2 px-4 duration-300"
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className="text-gray-700 font-medium hover:text-purple-600 transition"
+              >
+                {link.name}
+              </Link>
+            ))}
+            <Link
+              to="/contact"
+              className="bg-purple-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
             >
               Get in Touch
-            </a>
+            </Link>
           </div>
+
+          {/* Hamburger / Mobile Toggle */}
+          <button
+            className="md:hidden text-3xl text-gray-900 z-[60]"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle Menu"
+          >
+            {menuOpen ? "✕" : "☰"}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden fixed inset-0 bg-white flex flex-col items-center justify-center space-y-6 z-50">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              onClick={() => setMenuOpen(false)}
+              className="text-xl font-medium text-gray-800 hover:text-purple-600 transition"
+            >
+              {link.name}
+            </Link>
+          ))}
+
+          <Link
+            to="/contact"
+            onClick={() => setMenuOpen(false)}
+            className="mt-4 bg-purple-600 text-white px-10 py-3 rounded-full text-lg font-semibold"
+          >
+            Get in Touch
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };
