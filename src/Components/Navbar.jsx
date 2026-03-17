@@ -8,7 +8,6 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    // { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
     { name: "Portfolio", path: "/portfolio" },
     { name: "Pricing", path: "/pricing" },
@@ -37,6 +36,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
                 {link.name}
               </Link>
             ))}
+
             <Link
               to="/contact"
               className="bg-purple-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
@@ -45,7 +45,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
             </Link>
           </div>
 
-          {/* Hamburger / Mobile Toggle */}
+          {/* Mobile Toggle */}
           <button
             className="md:hidden text-3xl text-gray-900 z-[60]"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -56,29 +56,52 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden fixed inset-0 bg-white flex flex-col items-center justify-center space-y-6 z-50">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              onClick={() => setMenuOpen(false)}
-              className="text-xl font-medium text-gray-800 hover:text-purple-600 transition"
-            >
-              {link.name}
-            </Link>
-          ))}
+      {/* ================= MOBILE MENU ================= */}
+      <div className="md:hidden">
+        {/* Overlay */}
+        <div
+          onClick={() => setMenuOpen(false)}
+          className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+            menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
+        />
 
-          <Link
-            to="/contact"
-            onClick={() => setMenuOpen(false)}
-            className="mt-4 bg-purple-600 text-white px-10 py-3 rounded-full text-lg font-semibold"
-          >
-            Get in Touch
-          </Link>
+        {/* Drawer */}
+        <div
+          className={`fixed top-0 right-0 h-full w-[75%] max-w-sm bg-white/90 backdrop-blur-xl z-50 transform transition-transform duration-500 ease-in-out shadow-xl border-l ${
+            menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {/* Menu Content */}
+          <div className="flex flex-col justify-center h-full px-8 space-y-8">
+            {navLinks.map((link, i) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                onClick={() => setMenuOpen(false)}
+                className={`text-xl font-semibold text-gray-800 transition-all duration-500 ${
+                  menuOpen
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-10"
+                } hover:text-purple-600`}
+                style={{ transitionDelay: `${i * 100}ms` }}
+              >
+                {link.name}
+              </Link>
+            ))}
+
+            {/* CTA */}
+            <Link
+              to="/contact"
+              onClick={() => setMenuOpen(false)}
+              className="mt-6 bg-purple-600 text-white px-6 py-3 rounded-full text-center font-semibold hover:bg-purple-700 transition"
+            >
+              Get in Touch
+            </Link>
+          </div>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-indigo-500" />
         </div>
-      )}
+      </div>
     </nav>
   );
 };
